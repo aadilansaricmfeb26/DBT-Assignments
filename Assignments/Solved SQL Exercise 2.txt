@@ -1,0 +1,125 @@
+Q.1 Display the Supplier table in the descending order of CITY
+
+mysql> select * from S
+    -> order by City desc;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S2   | Jones |     10 | Paris  |
+| S3   | Blake |     30 | Paris  |
+| S1   | Smith |     20 | London |
+| S4   | David |     40 | Athens |
++------+-------+--------+--------+
+4 rows in set (0.008 sec)
+
+
+Q.2 Display the Part Table in the ascending order of CITY and within the city in the ascending order of Part names.
+
+mysql> select * from p
+    -> order by City, Pname;
++------+-------+-------+--------+--------+
+| P#   | Pname | Color | Weight | City   |
++------+-------+-------+--------+--------+
+| P5   | Bolt  | Black |     15 | Athens |
+| P4   | Nut   | Blue  |     18 | Athens |
+| P1   | Nut   | Red   |     12 | London |
+| P6   | Screw | Green |     13 | London |
+| P2   | Bolt  | Green |     17 | Paris  |
+| P3   | Screw | Blue  |     17 | Rome   |
++------+-------+-------+--------+--------+
+6 rows in set (0.005 sec)
+
+
+Q 3. Display all the Suppliers with a status between 10 and 20.
+
+Using IN:
+
+mysql> SELECT * from S where Status in(10, 20);
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Smith |     20 | London |
+| S2   | Jones |     10 | Paris  |
++------+-------+--------+--------+
+2 rows in set (0.005 sec)
+
+
+Using BETWEEN:
+
+mysql> SELECT * from S where Status between 10 and 20;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Smith |     20 | London |
+| S2   | Jones |     10 | Paris  |
++------+-------+--------+--------+
+2 rows in set (0.005 sec)
+
+
+Q. 4. Display all the Parts and their Weight, which are not in the range of 10 and 15.
+
+Using NOT IN:
+
+mysql> select * from p where Weight not in(10, 15);
++------+-------+-------+--------+--------+
+| P#   | Pname | Color | Weight | City   |
++------+-------+-------+--------+--------+
+| P1   | Nut   | Red   |     12 | London |
+| P2   | Bolt  | Green |     17 | Paris  |
+| P3   | Screw | Blue  |     17 | Rome   |
+| P4   | Nut   | Blue  |     18 | Athens |
+| P6   | Screw | Green |     13 | London |
++------+-------+-------+--------+--------+
+5 rows in set (0.008 sec)
+
+Using NOT BETWEEN:
+
+mysql> select * from p where Weight not between 10 and 15;
++------+-------+-------+--------+--------+
+| P#   | Pname | Color | Weight | City   |
++------+-------+-------+--------+--------+
+| P2   | Bolt  | Green |     17 | Paris  |
+| P3   | Screw | Blue  |     17 | Rome   |
+| P4   | Nut   | Blue  |     18 | Athens |
++------+-------+-------+--------+--------+
+3 rows in set (0.007 sec)
+ 
+
+Q.5 Display all the Part names starting with the letter 'S'.
+
+mysql> select pname from p
+    -> where pname like 'S%';
++-------+
+| pname |
++-------+
+| Screw |
+| Screw |
++-------+
+2 rows in set (0.005 sec)
+
+
+Q 6. Display all the Suppliers, belonging to cities starting with the letter 'L'
+
+mysql> select * from s
+    -> where city like 'L%';
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Smith |     20 | London |
++------+-------+--------+--------+
+1 row in set (0.005 sec)
+
+Q 7. Display all the Projects, with the third letter in JNAME as ‘n’.
+
+mysql> select * from P
+    -> where pname like '__n%';
++------+-----------+-------+--------+---------+
+| P#   | Pname     | Color | Weight | City    |
++------+-----------+-------+--------+---------+
+| P4   | Pen       | Black |     12 | Delhi   |
+| P5   | Banjo     | Red   |     15 | Mumbai  |
+| P6   | Condenser | Blue  |     20 | Chennai |
++------+-----------+-------+--------+---------+
+3 rows in set (0.007 sec)
+
+

@@ -1,0 +1,158 @@
+1. Display all the Supplier names with the initial letter capital
+
+mysql> select concat(upper(substring(sname, 1, 1)), substring(sname, 2)) from s;
+
++------------------------------------------------------------+
+| concat(upper(substring(sname, 1, 1)), substring(sname, 2)) |
++------------------------------------------------------------+
+| Smith                                                      |
+| Jones                                                      |
+| Blake                                                      |
+| David                                                      |
++------------------------------------------------------------+
+4 rows in set (0.008 sec)
+
+
+2. Display all the Supplier names in upper case.
+ 
+
+mysql> select upper(sname) from s;
++--------------+
+| upper(sname) |
++--------------+
+| SMITH        |
+| JONES        |
+| BLAKE        |
+| DAVID        |
++--------------+
+4 rows in set (0.006 sec)
+
+
+3. Display all the Supplier names in lower case.
+
+
+mysql> select lower(sname) from s;
++--------------+
+| lower(sname) |
++--------------+
+| smith        |
+| jones        |
+| blake        |
+| david        |
++--------------+
+4 rows in set (0.029 sec)
+
+
+4. Display all the Supplier names padded to 25 characters, with spaces on the left.
+
+mysql> select lpad(sname, 25, ' ') from s;
++---------------------------+
+| lpad(sname, 25, ' ')      |
++---------------------------+
+|                     Smith |
+|                     Jones |
+|                     Blake |
+|                     David |
+|                     Larry |
+|                     Layla |
++---------------------------+
+6 rows in set (0.025 sec)
+
+
+5. Display all the Supplier names (with 'la' replaced by 'ro).
+
+mysql> select replace(sname, 'la', 'ro') from s;
++----------------------------+
+| replace(sname, 'la', 'ro') |
++----------------------------+
+| Smith                      |
+| Jones                      |
+| Broke                      |
+| David                      |
+| Larry                      |
+| Layro                      |
++----------------------------+
+6 rows in set (0.004 sec)
+
+
+6. Implement the above command such that ‘l’ is replaced with ‘r’ and ‘a’ is replaced with ‘o’.
+
+
+mysql> select replace(replace(sname, 'l', 'r'), 'a', 'o') from s;
++---------------------------------------------+
+| replace(replace(sname, 'l', 'r'), 'a', 'o') |
++---------------------------------------------+
+| Smith                                       |
+| Jones                                       |
+| Broke                                       |
+| Dovid                                       |
+| Lorry                                       |
+| Loyro                                       |
++---------------------------------------------+
+6 rows in set (0.008 sec)
+
+
+7. Display the Supplier names and the lengths of the names.
+
+
+mysql> select sname, length(sname) as "Length" from s;
++-------+--------+
+| sname | Length |
++-------+--------+
+| Smith |      5 |
+| Jones |      5 |
+| Blake |      5 |
+| David |      5 |
+| Larry |      5 |
+| Layla |      5 |
++-------+--------+
+6 rows in set (0.007 sec)
+
+
+8. Use the soundex function to search for a supplier by the name of ‘BLOKE’.
+
+
+mysql> select sname from s where soundex(sname) = soundex('Bloke');
++-------+
+| sname |
++-------+
+| Blake |
++-------+
+1 row in set (0.007 sec)
+
+
+9. Display the Supplier name and the status (as Ten, Twenty, Thirty, etc.).
+
+
+mysql> select sname,
+    -> case
+    -> when status = 10 then 'Ten'
+    -> when status = 20 then 'Twenty'
+    -> when status = 30 then 'Thirty'
+    -> when status = 40 then 'Forty'
+    -> when status = 50 then 'Fifty'
+    -> else status
+    -> end "Status"
+    -> from s;
++-------+--------+
+| sname | Status |
++-------+--------+
+| Smith | Twenty |
+| Jones | Ten    |
+| Blake | Thirty |
+| David | Forty  |
+| Larry | Twenty |
+| Layla | Fifty  |
++-------+--------+
+6 rows in set (0.006 sec)
+
+
+10. Display the current day (e.g. Thursday).
+
+mysql> select dayname(sysdate()) from dual;
++--------------------+
+| dayname(sysdate()) |
++--------------------+
+| Friday             |
++--------------------+
+6 rows in set (0.018 sec)

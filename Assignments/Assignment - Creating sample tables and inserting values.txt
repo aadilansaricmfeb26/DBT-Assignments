@@ -1,0 +1,94 @@
+1. USE DATABASE:-
+
+use kharghar;
+
+------------------------------------------------------------
+
+1. CREATE TABLES:-
+
+create table SALESPEOPLE(
+Snum int(4),
+Sname varchar(10),
+City varchar(10),
+Comm float(3,2)
+);
+
+create table CUSTOMER (
+Cnum int(4),
+Cname varchar(10),
+City varchar(10),
+Rating int(4),
+Snum int(4)
+);
+
+create table ORDERS (
+Onum int(4),
+Amt float(7,2),
+Odate,
+Cnum int(4),
+Snum int(4)
+);
+
+-------------------------------------------------------------
+
+2. INSERT DATA INTO THE TABLES:-
+
+insert into SALESPEOPLE (Snum, Sname, City, Comm)
+values
+(1001, 'Peel', 'London', 0.12),
+(1002, 'Serres', 'Jan Jose', 0.13),
+(1004, 'Motika', 'London', 0.11),
+(1007, 'Rifkin', 'Barcelona', 0.15),
+(1003, 'Axelrod', 'New York', 0.10);
+
+insert into CUSTOMER (Cnum, Cname, City, Rating, Snum)
+values
+(2001, 'Hoffman', 'London', 100, 1001),
+(2002, 'Giovanni', 'Rome', 200, 1003),
+(2003, 'Liu', 'San Jose', 200, 1002),
+(2004, 'Grass', 'Berlin', 300, 1002),
+(2006, 'Clemens', 'London', 100, 1001),
+(2008, 'Cisneros', 'San Jose', 300, 1007),
+(2001, 'Pereira', 'Rome', 100, 1004);
+
+mysql> insert into CUSTOMER (Cnum, Cname, City, Rating, Snum)
+    -> values
+    -> (2001, 'Hoffman', 'London', 100, 1001),
+    -> (2002, 'Giovanni', 'Rome', 200, 1003),
+    -> (2003, 'Liu', 'San Jose', 200, 1002),
+    -> (2004, 'Grass', 'Berlin', 300, 1002),
+    -> (2006, 'Clemens', 'London', 100, 1001),
+    -> (2008, 'Cisneros', 'San Jose', 300, 1007),
+    -> (2007, 'Pereira', 'Rome', 100, 1004);
+	
+Query OK, 7 rows affected (0.083 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+insert into ORDERS (Onum, Amt, Odate, Cnum, Snum)
+values
+(3001, 18.69, '90-10-03', 2008, 1007),
+(3003, 767.19, '90-10-03', 2001, 1001),
+(3002, 1900.10, '90-10-03', 2007, 1004),
+(3005, 5160.45, '90-10-03', 2003, 1002),
+(3006, 1098.16, '90-10-03', 2008, 1007),
+(3009, 1713.23, '90-10-04', 2002, 1003),
+(3007, 75.75, '90-10-04', 2004, 1002),
+(3008, 4723.00, '90-10-05', 2006, 1001),
+(3010, 1309.95, '90-10-06', 2004, 1002),
+(3011, 9891.88, '90-10-06', 2006, 1001);
+
+mysql> insert into ORDERS (Onum, Amt, Odate, Cnum, Snum)
+    -> values
+    -> (3001, 18.69, '90-10-03', 2008, 1007),
+    -> (3003, 767.19, '90-10-03', 2001, 1001),
+    -> (3002, 1900.10, '90-10-03', 2007, 1004),
+    -> (3005, 5160.45, '90-10-03', 2003, 1002),
+    -> (3006, 1098.16, '90-10-03', 2008, 1007),
+    -> (3009, 1713.23, '90-10-04', 2002, 1003),
+    -> (3007, 75.75, '90-10-04', 2004, 1002),
+    -> (3008, 4723.00, '90-10-05', 2006, 1001),
+    -> (3010, 1309.95, '90-10-06', 2004, 1002),
+    -> (3011, 9891.88, '90-10-06', 2006, 1001);
+Query OK, 10 rows affected (0.159 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
