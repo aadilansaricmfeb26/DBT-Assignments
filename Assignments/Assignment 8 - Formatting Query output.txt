@@ -1,0 +1,74 @@
+1)	Assume each salesperson has a 12% commission. Write a query on the orders table that will produce the order number, the salesperson number, and the amount of the salespersonâ€™s commission for that order.
+
+
+mysql> select snum, sum(amt*0.12) from orders
+    -> group by snum;
++------+---------------+
+| snum | sum(amt*0.12) |
++------+---------------+
+| 1007 |        134.02 |
+| 1001 |       1845.85 |
+| 1004 |        228.01 |
+| 1002 |        785.54 |
+| 1003 |        205.59 |
++------+---------------+
+5 rows in set (0.008 sec)
+
+
+
+2)	Write a query on the Customers table that will find the highest rating in each city. Put the output in this form:
+For the city (city), the highest rating is : (rating).
+
+
+mysql> select concat(concat("For the city ", city), concat(" The highest rating is: ", max(rating))) from customers
+    -> group by city;
++----------------------------------------------------------------------------------------+
+| concat(concat("For the city ", city), concat(" The highest rating is: ", max(rating))) |
++----------------------------------------------------------------------------------------+
+| For the city London The highest rating is: 100                                         |
+| For the city Rome The highest rating is: 200                                           |
+| For the city San Jose The highest rating is: 300                                       |
+| For the city Berlin The highest rating is: 300                                         |
+| NULL                                                                                   |
++----------------------------------------------------------------------------------------+
+5 rows in set (0.005 sec)
+
+
+
+3)	Write a query that lists customers in descending order of rating. Output the rating field first, followed by the customerâ€™s name and number.
+
+
+mysql> select rating, cname, cnum from customers
+    -> order by 1 desc;
++--------+----------+------+
+| rating | cname    | cnum |
++--------+----------+------+
+|    300 | Grass    | 2004 |
+|    300 | Cisneros | 2008 |
+|    200 | Giovanni | 2002 |
+|    200 | Liu      | 2003 |
+|    200 | John     | 2009 |
+|    100 | Hoffman  | 2001 |
+|    100 | Clemens  | 2006 |
+|    100 | Pereira  | 2007 |
+|    100 | Smith    | 2010 |
++--------+----------+------+
+9 rows in set (0.006 sec)
+
+
+
+4. Write a query that totals the orders for each day and places the results in descending order.
+
+
+mysql> select sum(amt) from orders
+    -> group by odate
+    -> order by 1 desc;
++----------+
+| sum(amt) |
++----------+
+| 11201.83 |
+|  8944.59 |
+|  4723.00 |
+|  1788.98 |
++----------+
+4 rows in set (0.008 sec)

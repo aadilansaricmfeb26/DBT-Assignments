@@ -1,0 +1,244 @@
+1.	Display the Supplier name and the Quantity sold.
+
+
+A) using spj as a drive table, processing speed is slow (0.010 sec) because spj has more rows than s, drive table should have less rows than the driven table.
+
+
+mysql> select sname, sum(qty) from s, spj
+    -> where s.`S#` = spj.`S#`
+    -> group by sname;
++-------+----------+
+| sname | sum(qty) |
++-------+----------+
+| Smith |     1220 |
+| Jones |     2100 |
+| Blake |     2650 |
+| Larry |     1980 |
+| David |     1980 |
++-------+----------+
+5 rows in set (0.010 sec)
+
+
+A) using s as a drive table, processing speed is fast (0.007 sec) because s has less rows than s.
+
+mysql> select sname, sum(qty) from spj, s
+    -> where s.`S#` = spj.`S#`
+    -> group by sname;
++-------+----------+
+| sname | sum(qty) |
++-------+----------+
+| Smith |     1220 |
+| Jones |     2100 |
+| Blake |     2650 |
+| Larry |     1980 |
+| David |     1980 |
++-------+----------+
+5 rows in set (0.007 sec)
+
+
+2. Display the Part name and Quantity sold.
+
+
+mysql> select pname, sum(qty) from p, spj
+    -> where p.`P#` = spj.`P#`
+    -> group by pname;
++-----------+----------+
+| pname     | sum(qty) |
++-----------+----------+
+| Nut       |     2200 |
+| Bolt      |     3100 |
+| Screw     |     2650 |
+| Pen       |     1100 |
+| Banjo     |     1600 |
+| Condenser |     1000 |
++-----------+----------+
+6 rows in set (0.008 sec)
+
+
+3.	Display the Project name and Quantity sold.
+
+mysql> select jname, sum(qty) from spj, j
+    -> where j.`J#` = spj.`J#`
+    -> group by jname;
++---------+----------+
+| jname   | sum(qty) |
++---------+----------+
+| Sorter  |     1850 |
+| Display |     2470 |
+| OCR     |     3630 |
++---------+----------+
+3 rows in set (0.007 sec)
+
+
+4.	Display the Supplier name, Part name, Project name and Quantity sold.
+
+select sname, pname, jname, qty from s, p, j, spj
+where s.`S#` = spj.`S#` and p.`P#` = spj.`P#` and j.`J#` = spj.`J#`;
+
+
+mysql> select sname, pname, jname, qty from s, p, j, spj
+    -> where s.`S#` = spj.`S#` and p.`P#` = spj.`P#` and j.`J#` = spj.`J#`;
++-------+-----------+---------+------+
+| sname | pname     | jname   | qty  |
++-------+-----------+---------+------+
+| Smith | Nut       | Sorter  |  200 |
+| Smith | Nut       | Sorter  |  200 |
+| Smith | Nut       | Display |  700 |
+| Jones | Bolt      | Display |  300 |
+| Jones | Bolt      | Sorter  |  300 |
+| Jones | Bolt      | OCR     |  900 |
+| Blake | Screw     | OCR     |  400 |
+| Blake | Screw     | Display |  400 |
+| Blake | Screw     | OCR     |  850 |
+| Larry | Nut       | Sorter  |  150 |
+| Larry | Nut       | Display |  950 |
+| David | Nut       | Sorter  |  150 |
+| David | Nut       | Display |  950 |
+| Blake | Bolt      | Sorter  | 1000 |
+| Jones | Bolt      | OCR     |  600 |
+| Larry | Screw     | OCR     |  880 |
+| David | Screw     | OCR     |  880 |
+| Smith | Screw     | Display |  120 |
+| Larry | Pen       | Sorter  |  150 |
+| Larry | Pen       | Display |  950 |
+| David | Pen       | Sorter  |  150 |
+| David | Pen       | Display |  950 |
+| Blake | Banjo     | Sorter  | 1000 |
+| Jones | Banjo     | OCR     |  600 |
+| Larry | Condenser | OCR     |  880 |
+| David | Condenser | OCR     |  880 |
+| Smith | Condenser | Display |  120 |
++-------+-----------+---------+------+
+27 rows in set (0.009 sec)
+
+
+
+5.	Display the Supplier name, Supplying Parts to a Project in the same City.
+
+select sname, pname, jname from s, p, j, spj
+where s.`S#` = spj.`S#` AND p.`P#` = spj.`P#` AND j.`J#` = spj.`J#` AND s.city = j.city;
+
+mysql> select sname, pname, jname from s, p, j, spj
+    -> where s.`S#` = spj.`S#` AND p.`P#` = spj.`P#` AND j.`J#` = spj.`J#` AND s.city = j.city;
++-------+-----------+--------+
+| sname | pname     | jname  |
++-------+-----------+--------+
+| Jones | Bolt      | Sorter |
+| Blake | Bolt      | Sorter |
+| David | Screw     | OCR    |
+| Blake | Banjo     | Sorter |
+| David | Condenser | OCR    |
++-------+-----------+--------+
+5 rows in set (0.010 sec)
+
+
+
+6.	Display the Part name that is ‘Red’ is color, and the Quantity sold.
+
+mysql> select pname, color, SUM(qty) from p, spj
+    -> where p.`P#` = spj.`P#` and p.color = 'Red'
+    -> group by pname;
++-------+-------+----------+
+| pname | color | SUM(qty) |
++-------+-------+----------+
+| Nut   | Red   |     1100 |
+| Banjo | Red   |     1600 |
++-------+-------+----------+
+2 rows in set (0.009 sec)
+
+
+7.	Display all the Quantity sold by Suppliers with the Status = 20.
+
+mysql> select sname, status, sum(qty) from s, spj
+    -> where s.`S#` = spj.`S#` and s.status = 20
+    -> group by sname;
++-------+--------+----------+
+| sname | status | sum(qty) |
++-------+--------+----------+
+| Smith |     20 |     1220 |
+| Larry |     20 |     1980 |
++-------+--------+----------+
+2 rows in set (0.006 sec)
+
+
+
+8. Display all the Parts and Quantity with a Weight > 14
+
+select pname, weight, sum(qty) from p, spj
+where p.`P#` = spj.`P#` AND p.weight > 14
+group by pname, weight;
+
+mysql> select pname, weight, sum(qty) from p, spj
+    -> where p.`P#` = spj.`P#` AND p.weight > 14
+    -> group by pname, weight;
++-----------+--------+----------+
+| pname     | weight | sum(qty) |
++-----------+--------+----------+
+| Bolt      |     17 |     1500 |
+| Screw     |     17 |     1650 |
+| Nut       |     18 |     1100 |
+| Banjo     |     15 |     1600 |
+| Bolt      |     15 |     1600 |
+| Condenser |     20 |     1000 |
++-----------+--------+----------+
+6 rows in set (0.008 sec)
+
+
+
+9. Display all the Project names and City, which has bought more than 500 Parts
+
+select jname, j.city, sum(qty) from j, spj
+where j.`J#` = spj.`J#`
+group by jname, j.city
+having sum(qty) > 500;
+
+
+mysql> select jname, j.city, sum(qty) from j, spj
+    -> where j.`J#` = spj.`J#`
+    -> group by jname, j.city
+    -> having sum(qty) > 500;
++---------+--------+----------+
+| jname   | city   | sum(qty) |
++---------+--------+----------+
+| Sorter  | Paris  |     1850 |
+| Display | Rome   |     2470 |
+| OCR     | Athens |     3630 |
++---------+--------+----------+
+3 rows in set (0.010 sec)
+
+
+
+10.	Display all the Part names and Quantity sold that have a Weight less than 15.
+
+mysql> select pname, weight, sum(qty) from p, spj
+    -> where p.`P#` = spj.`P#` AND p.weight < 15
+    -> group by pname, weight;
++-------+--------+----------+
+| pname | weight | sum(qty) |
++-------+--------+----------+
+| Nut   |     12 |     1100 |
+| Pen   |     12 |     1100 |
+| Screw |     13 |     1000 |
++-------+--------+----------+
+3 rows in set (0.013 sec)
+
+
+
+11. Display all the Employee names and the name of their Managers.
+
+mysql> select a.empname Mngr_Name, b.empname Emp_Name from semp a, semp b
+    -> where a.empno = b.depthead;
++-----------+----------+
+| Mngr_Name | Emp_Name |
++-----------+----------+
+| SUNIL     | ALI      |
+| HIREN     | GEORGE   |
++-----------+----------+
+2 rows in set (0.006 sec)
+
+
+
+
+
+
+

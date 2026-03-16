@@ -1,0 +1,200 @@
+1.	Display the minimum Status in the Supplier table.
+
+mysql> select min(status) from s;
++-------------+
+| min(status) |
++-------------+
+|          10 |
++-------------+
+1 row in set (0.031 sec)
+
+
+
+2.	Display the maximum Weight in the Parts table.
+
+mysql> select max(weight) from p;
++-------------+
+| max(weight) |
++-------------+
+|          20 |
++-------------+
+1 row in set (0.110 sec)
+
+
+
+3.	Display the average Weight of the Parts.
+
+a) using avg function (slower)
+
+mysql> select avg(weight) from p;
++-------------+
+| avg(weight) |
++-------------+
+|     15.4444 |
++-------------+
+1 row in set (0.034 sec)
+
+
+b) using sum and count functions (Faster by 2x)
+
+mysql> select sum(weight)/count(*) from p;
++----------------------+
+| sum(weight)/count(*) |
++----------------------+
+|              15.4444 |
++----------------------+
+1 row in set (0.015 sec)
+
+
+4.	Display the total Quantity sold for part 'P1'.
+
+mysql> select sum(qty) from spj
+    -> where `P#` = 'P1';
++----------+
+| sum(qty) |
++----------+
+|     1100 |
++----------+
+1 row in set (0.006 sec)
+
+
+5. Display the total Quantity sold for each part.
+
+mysql> select `P#`, sum(qty) from spj
+    -> group by `P#`;
++------+----------+
+| P#   | sum(qty) |
++------+----------+
+| P1   |     1100 |
+| P2   |     1500 |
+| P3   |     1650 |
+| P4   |     1100 |
+| P5   |     1600 |
+| P6   |     1000 |
++------+----------+
+6 rows in set (0.006 sec)
+
+
+6. Display the average Quantity sold for each part.
+
+mysql> select `P#`, sum(qty)/count(*) from spj
+    -> group by `P#`;
++------+-------------------+
+| P#   | sum(qty)/count(*) |
++------+-------------------+
+| P1   |          366.6667 |
+| P2   |          500.0000 |
+| P3   |          550.0000 |
+| P4   |          550.0000 |
+| P5   |          800.0000 |
+| P6   |          500.0000 |
++------+-------------------+
+6 rows in set (0.006 sec)
+
+
+7. Display the maximum Quantity sold for each part, provided the maximum Quantity is greater than 800.
+
+mysql> select `P#`, max(qty) from spj
+    -> group by `P#`
+    -> having max(qty) > 800;
++------+----------+
+| P#   | max(qty) |
++------+----------+
+| P2   |      900 |
+| P3   |      850 |
+| P4   |      950 |
+| P5   |     1000 |
+| P6   |      880 |
++------+----------+
+5 rows in set (0.011 sec)
+
+
+8.	Display the Status and the count of Suppliers with that Status.
+
+
+mysql> select status, count(`S#`) from s
+    -> group by status;
++--------+-------------+
+| status | count(`S#`) |
++--------+-------------+
+|     20 |           2 |
+|     10 |           1 |
+|     30 |           1 |
+|     40 |           1 |
+|     50 |           1 |
++--------+-------------+
+5 rows in set (0.006 sec)
+
+mysql> select status, count(*) from s
+    -> group by status;
++--------+----------+
+| status | count(*) |
++--------+----------+
+|     20 |        2 |
+|     10 |        1 |
+|     30 |        1 |
+|     40 |        1 |
+|     50 |        1 |
++--------+----------+
+5 rows in set (0.006 sec)
+
+
+
+9.	Display the count of Projects going on in different cities.
+
+
+mysql> select city, count(`P#`) from p
+    -> group by city;
++---------+-------------+
+| city    | count(`P#`) |
++---------+-------------+
+| London  |           2 |
+| Paris   |           1 |
+| Rome    |           1 |
+| Athens  |           2 |
+| Delhi   |           1 |
+| Mumbai  |           1 |
+| Chennai |           1 |
++---------+-------------+
+7 rows in set (0.006 sec)
+
+
+10.	What is the difference between COUNT(Status) and COUNT(*) ?
+
+Count(status): count status only count those row not having null in status column. It count only non-null rows.
+
+Count(*): Whereas count(*) count all the rows even if they have null values. Basically it count all the rows.
+
+
+11. Display the Status and the Count of Suppliers with that Status in the following format as shown below:-
+
+
+Status		COUNT
+Ten			10
+Twenty		20
+Thirty		30
+
+
+select
+case
+when status = 10 then 'Ten'
+when status = 20 then 'Twenty'
+when status = 30 then 'Thrity'
+when status = 40 then 'Forty'
+when status = 50 then 'Fifty'
+else status
+end "Status",
+count(*) "COUNT"
+from s
+group by status;
+
++--------+-------+
+| Status | COUNT |
++--------+-------+
+| Twenty |     2 |
+| Ten    |     1 |
+| Thrity |     1 |
+| Forty  |     1 |
+| Fifty  |     1 |
++--------+-------+
+5 rows in set, 1 warning (0.005 sec)

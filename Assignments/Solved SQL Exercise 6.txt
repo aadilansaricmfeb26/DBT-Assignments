@@ -1,0 +1,201 @@
+1.	Display all the Suppliers with the same Status as the supplier, ‘CLARK’.
+
+select sname from s
+where status = 
+(select status from s
+where sname = "Clark");
+
+
+mysql> select sname from s
+    -> where status =
+    -> (select status from s
+    -> where sname = "Clark");
++-------+
+| sname |
++-------+
+| Smith |
+| Larry |
+| Clark |
++-------+
+3 rows in set (0.016 sec)
+
+
+
+2.	Display all the Employees in the same department as the employee ‘MILLER’.
+
+select empname from semp
+where deptno =
+(select deptno from semp
+where empname = 'Miller');
+
+
+mysql> select empname from semp
+    -> where deptno =
+    -> (select deptno from semp
+    -> where empname = 'Miller');
++---------+
+| empname |
++---------+
+| SUNIL   |
+| ALI     |
+| Miller  |
++---------+
+3 rows in set (0.006 sec)
+
+
+
+3. Display all the Parts which have more Weight than all the Red parts
+
+select pname, color, weight from p
+where weight > 
+(select max(weight) from p
+where color = 'Red');
+
+
+mysql> select pname, color, weight from p
+    -> where weight >
+    -> (select max(weight) from p
+    -> where color = 'Red');
++-----------+-------+--------+
+| pname     | color | weight |
++-----------+-------+--------+
+| Bolt      | Green |     17 |
+| Screw     | Blue  |     17 |
+| Nut       | Blue  |     18 |
+| Condenser | Blue  |     20 |
++-----------+-------+--------+
+4 rows in set (0.006 sec)
+
+
+
+4.	Display all the Projects going on in the same city as the project 'TAPE'.
+
+select jname from j
+where city =
+(select city from jn
+where jname = 'Tape');
+
+
+mysql> select jname from j
+    -> where city =
+    -> (select city from j
+    -> where jname = 'Tape');
++--------+
+| jname  |
++--------+
+| Sorter |
+| Tape   |
+| LCD    |
++--------+
+3 rows in set (0.005 sec)
+
+
+
+5.	Display all the Parts with Weight less than all the Green parts.
+
+select pname, color, weight from p
+where weight <
+(select min(weight) from p
+where color = 'Green');
+
+
+mysql> select pname, color, weight from p
+    -> where weight <
+    -> (select min(weight) from p
+    -> where color = 'Green');
++-------+-------+--------+
+| pname | color | weight |
++-------+-------+--------+
+| Nut   | Red   |     12 |
+| Pen   | Black |     12 |
++-------+-------+--------+
+2 rows in set (0.006 sec)
+
+
+
+6.	Display the name of the Supplier who has sold the maximum Quantity (in one sale).
+
+select sname from s
+where `S#` =
+(select `S#` from spj
+where qty =
+(select max(qty) from spj));
+
+
+mysql> select sname from s
+    -> where `S#` =
+    -> (select `S#` from spj
+    -> where qty =
+    -> (select max(qty) from spj));
++-------+
+| sname |
++-------+
+| Blake |
++-------+
+1 row in set (0.004 sec)
+
+
+
+7.	Display the name of the Employee with the minimum Salary.
+
+select empname, basic from semp
+where basic =
+(select min(basic) from semp);
+	
+	
+mysql> select empname, basic from semp
+    -> where basic =
+    -> (select min(basic) from semp);
++---------+-------+
+| empname | basic |
++---------+-------+
+| ALI     |  4000 |
+| Miller  |  4000 |
++---------+-------+
+2 rows in set (0.005 sec)
+
+
+
+8.	Display the name of the Supplier who has sold the maximum overall Quantity (sum of Sales).
+
+select sname from s
+where s.`S#` = 
+(select `S#` from spj
+group by `S#`
+order by sum(qty) desc limit 1);
+
+
+mysql> select sname from s
+    -> where s.`S#` =
+    -> (select `S#` from spj
+    -> group by `S#`
+    -> order by sum(qty) desc limit 1);
++-------+
+| sname |
++-------+
+| Blake |
++-------+
+1 row in set (0.005 sec)
+
+
+
+9. Display the name of the Department with the maximum number of Employees.
+
+select deptname from sdept
+where deptno =
+(select deptno from semp
+group by deptno
+order by count(*) desc limit 1);
+
+
+mysql> select deptname from sdept
+    -> where deptno =
+    -> (select deptno from semp
+    -> group by deptno
+    -> order by count(*) desc limit 1);
++-------------+
+| deptname    |
++-------------+
+| Development |
++-------------+
+1 row in set (0.005 sec)
