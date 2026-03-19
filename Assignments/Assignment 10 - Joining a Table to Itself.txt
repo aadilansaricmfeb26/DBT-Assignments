@@ -1,0 +1,59 @@
+1)	Write a query that produces all pairs of salespeople who are living in the same city.  Exclude combinations of salespeople with themselves as well as duplicate rows with the order reversed.
+
+select a.sname, b.sname, a.city, b.city from salespeople a, salespeople b
+where a.city = b.city and a.sname < b.sname
+order by 1 desc;
+
+
+mysql> select a.sname, b.sname, a.city, b.city from salespeople a, salespeople b
+    -> where a.city = b.city and a.sname < b.sname
+    -> order by 1 desc;
++--------+-------+--------+--------+
+| sname  | sname | city   | city   |
++--------+-------+--------+--------+
+| Motika | Peel  | London | London |
++--------+-------+--------+--------+
+1 row in set (0.007 sec)
+
+
+
+2)	Write a query that produces the names and cities of all customers with the same rating as Hoffman.
+
+select a.cname, a.city from customers a, customers b
+where b.cname = 'Hoffman' and a.rating = b.rating;
+
+mysql> select a.cname, a.city from customers a, customers b
+    -> where b.cname = 'Hoffman' and a.rating = b.rating;
++---------+--------+
+| cname   | city   |
++---------+--------+
+| Hoffman | London |
+| Clemens | London |
+| Pereira | Rome   |
+| Smith   | NULL   |
++---------+--------+
+4 rows in set (0.007 sec)
+
+---> Using Sub-Query
+
+select cname, city, rating from customers
+where rating =
+(select rating from customers
+where cname = 'Hoffman');
+
+mysql> select cname, city, rating from customers
+    -> where rating =
+    -> (select rating from customers
+    -> where cname = 'Hoffman');
++---------+--------+--------+
+| cname   | city   | rating |
++---------+--------+--------+
+| Hoffman | London |    100 |
+| Clemens | London |    100 |
+| Pereira | Rome   |    100 |
+| Smith   | NULL   |    100 |
++---------+--------+--------+
+4 rows in set (0.004 sec)
+
+
+

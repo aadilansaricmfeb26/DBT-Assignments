@@ -1,0 +1,117 @@
+1)	Create a union of two queries that shows the names, cities, and ratings of all customers. Those with rating of 200 or greater will also have the words “High Rating”, while the others will have the words “Low Rating”.
+
+
+select cname, city, 'High Rating' as Rating
+from customers
+where rating >=200
+union
+select cname, city, 'Low Rating'
+from customers
+where rating < 200;
+
+mysql> select cname, city, 'High Rating' as Rating
+    -> from customers
+    -> where rating >=200
+    -> union
+    -> select cname, city, 'Low Rating'
+    -> from customers
+    -> where rating < 200;
++----------+----------+-------------+
+| cname    | city     | Rating      |
++----------+----------+-------------+
+| Giovanni | Rome     | High Rating |
+| Liu      | San Jose | High Rating |
+| Grass    | Berlin   | High Rating |
+| Cisneros | San Jose | High Rating |
+| John     | NULL     | High Rating |
+| Hoffman  | London   | Low Rating  |
+| Clemens  | London   | Low Rating  |
+| Pereira  | Rome     | Low Rating  |
+| Smith    | NULL     | Low Rating  |
++----------+----------+-------------+
+9 rows in set (0.006 sec)
+
+
+
+2)	Write a command that produces the name and number of each salesperson and each customer with more than one current order. Put the results in alphabetical order.
+
+
+select count(onum), orders.snum, orders.cnum from orders, customers
+where orders.cnum = customers.cnum
+group by count(onum), orders.snum, orders.cnum;
+
+
+select sname as "S_Name and C_Name", snum as "S_Num and S_Num" from salespeople
+where snum in
+(select snum from orders
+group by snum
+having count(*)>1)
+union
+select cname, cnum from customers
+where cnum in
+(select cnum from orders
+group by cnum
+having count(*)>1)
+order by 1;
+
+
+mysql> select sname as "S_Name and C_Name", snum as "S_Num and S_Num" from salespeople
+    -> where snum in
+    -> (select snum from orders
+    -> group by snum
+    -> having count(*)>1)
+    -> union
+    -> select cname, cnum from customers
+    -> where cnum in
+    -> (select cnum from orders
+    -> group by cnum
+    -> having count(*)>1)
+    -> order by 1;
++-------------------+-----------------+
+| S_Name and C_Name | S_Num and S_Num |
++-------------------+-----------------+
+| Cisneros          |            2008 |
+| Clemens           |            2006 |
+| Grass             |            2004 |
+| Peel              |            1001 |
+| Rifkin            |            1007 |
+| Serres            |            1002 |
++-------------------+-----------------+
+6 rows in set (0.013 sec)
+
+
+3. Form a union of three queries. Have the first select the snums of all salespeople in San Jose; the second, the cnums of all customers in San Jose; and the third the onums of all orders on October 3. Retain duplicates between the last two queries but eliminate any redundancies between either of them and the first.
+(Note: in the sample tables as given, there would be no such redundancy. This is besides the point.)
+
+select snum from salespeople
+where city = 'San Jose'
+union
+(select cnum from customers
+where city = 'San Jose'
+union all
+select onum from orders
+where odate = '1990-10-03');
+
+
+mysql> select snum from salespeople
+    -> where city = 'San Jose'
+    -> union
+    -> (select cnum from customers
+    -> where city = 'San Jose'
+    -> union all
+    -> select onum from orders
+    -> where odate = '1990-10-03');
++------+
+| snum |
++------+
+| 1002 |
+| 2003 |
+| 2008 |
+| 3001 |
+| 3003 |
+| 3002 |
+| 3005 |
+| 3006 |
++------+
+8 rows in set (0.007 sec)
+
